@@ -9,8 +9,9 @@ public class HospitalParser implements Parser<Hospital> {
     }
     @Override
     public Hospital parse(String str) {
+        str = replaceAllQuot(str); //line 받을때부터 모든 ""를 없앤다
         String[] splitted = str.split(",");
 
-        return new Hospital(replaceAllQuot(splitted[0]),replaceAllQuot(splitted[1]));
+        return new Hospital(splitted[0],splitted[1]);
     }
 }

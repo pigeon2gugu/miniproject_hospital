@@ -10,6 +10,7 @@ public class Hospital {
     private String name;
     private String subdivition;
 
+
     public Hospital(String id, String address) {
 
         this.id = id;
