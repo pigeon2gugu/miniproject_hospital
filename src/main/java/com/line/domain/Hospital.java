@@ -6,6 +6,9 @@ public class Hospital {
     private String address;
     private String district;
     private String category;
+    private Integer emergencyRoom;
+    private String name;
+
     public Hospital(String id) {
         this.id = id.replaceAll("\"","");
     }
