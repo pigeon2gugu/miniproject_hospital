@@ -24,14 +24,14 @@ public class Main {
 
          */
 
-        hospitalLineReader.createANewFile("C:\\Users\\khn11\\Downloads\\seoul_hospital_infos.sql");
-
         List<String> hospitalQry = new ArrayList<>();
 
         for (Hospital hospital : hospitals) {
             hospitalQry.add(hospital.getSqlInsertQuery2());
         }
 
-        hospitalLineReader.writeLines(hospitalQry, "C:\\Users\\khn11\\Downloads\\seoul_hospital_infos.sql");
+        String sqlFilename = "seoul_hospital_insert.sql";
+        hospitalLineReader.createANewFile(sqlFilename);
+        hospitalLineReader.writeLines(hospitalQry, sqlFilename);
     }
 }
