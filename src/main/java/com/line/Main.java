@@ -4,6 +4,7 @@ import com.line.domain.Hospital;
 import com.line.parser.HospitalParser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -12,8 +13,25 @@ public class Main {
         String filename = "C:\\Users\\khn11\\Downloads\\seoul_hospital_infos.csv";
         List<Hospital> hospitals = hospitalLineReader.readLines(filename);
 
+
+        /*
         for (Hospital hospital : hospitals) {
-            System.out.println(hospital.getId());
+            System.out.printf("%s,%s,%s,%s,%d,%s,%s\n",
+                    hospital.getId(), hospital.getAddress(), hospital.getDistrict(),
+                    hospital.getCategory(),hospital.getEmergencyRoom(), hospital.getName(),
+                    hospital.getSubdivision());
         }
+
+         */
+
+        hospitalLineReader.createANewFile("C:\\Users\\khn11\\Downloads\\seoul_hospital_infos.sql");
+
+        List<String> hospitalQry = new ArrayList<>();
+
+        for (Hospital hospital : hospitals) {
+            hospitalQry.add(hospital.getSqlInsertQuery2());
+        }
+
+        hospitalLineReader.writeLines(hospitalQry, "C:\\Users\\khn11\\Downloads\\seoul_hospital_infos.sql");
     }
 }
