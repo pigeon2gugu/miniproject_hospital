@@ -1,5 +1,6 @@
 package com.line;
 
+import com.dbexecise.domain.User;
 import com.line.parser.Parser;
 
 import java.io.*;
@@ -7,8 +8,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.rmi.RemoteException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class LineReader<T> {
 
@@ -54,5 +57,41 @@ public class LineReader<T> {
         System.out.println("success");
     }
 
+    public void insert() throws SQLException, ClassNotFoundException {
+        Map<String, String> env = System.getenv();
+        String dbHost = env.get("DB_HOST");
+        String dbUser = env.get("DB_USER");
+        String dbPassword = env.get("DB_PASSWORD");
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conn = DriverManager.getConnection(dbHost, dbUser, dbPassword);
+        PreparedStatement ps = conn.prepareStatement("INSERT INTO users(id, name, password) VALUES(?, ?, ?)");
+        ps.setString(1, "4");
+        ps.setString(2, "Haneul");
+        ps.setString(3, "1123");
+
+        ps.executeUpdate(); //ctrl + enter
+        ps.close();
+        conn.close();
+    }
+
+    public User select(String id) throws SQLException, ClassNotFoundException {
+        Map<String, String> env = System.getenv();
+        String dbHost = env.get("DB_HOST");
+        String dbUser = env.get("DB_USER");
+        String dbPassword = env.get("DB_PASSWORD");
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conn = DriverManager.getConnection(dbHost, dbUser, dbPassword);
+        PreparedStatement ps = conn.prepareStatement("SELECT * FROM users WHERE id = ?");
+        ps.setString(1, id);
+        ResultSet rs = ps.executeQuery();
+        rs.next();
+        User user = new User(rs.getString("id"), rs.getString("name"), rs.getString("password"));
+        rs.close();
+        ps.close();
+        conn.close();
+        return user;
+    }
 
 }
