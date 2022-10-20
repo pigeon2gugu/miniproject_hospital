@@ -52,7 +52,7 @@ public class UserDao {
     public void deleteAll() throws SQLException {
         Connection conn = connectionMaker.makeConnection();
         PreparedStatement ps = conn.prepareStatement("delete from users");
-        ps.executeQuery();
+        ps.executeUpdate();
         ps.close();
         conn.close();
     }
