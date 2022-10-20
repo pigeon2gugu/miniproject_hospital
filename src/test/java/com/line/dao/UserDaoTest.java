@@ -2,17 +2,20 @@ package com.line.dao;
 
 import com.line.domain.User;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = UserDaoFactory.class)
@@ -20,14 +23,19 @@ class UserDaoTest {
 
     @Autowired
     ApplicationContext context;
+    UserDao userDao;
+
+    @BeforeEach
+    void setUp() throws SQLException {
+        userDao = context.getBean("awsUserDao", UserDao.class);
+        userDao.deleteAll();
+    }
+
 
     @Test
     @DisplayName("add and select doing well")
 
     void addAndSelect() throws SQLException, ClassNotFoundException {
-        UserDao userDao = context.getBean("awsUserDao", UserDao.class);
-
-        userDao.deleteAll();
 
         User user1 = new User("1", "kyeonghwan", "1123");
         userDao.add(user1);
@@ -46,16 +54,21 @@ class UserDaoTest {
         User user2 = new User("2", "sohyun", "1234");
         User user3 = new User("3", "sujin", "11423");
 
-        UserDao userDao = context.getBean("awsUserDao", UserDao.class);
-        userDao.deleteAll();
-        assertEquals(0, userDao.getCount());
-
         userDao.add(user1);
         assertEquals(1, userDao.getCount());
         userDao.add(user2);
         assertEquals(2, userDao.getCount());
         userDao.add(user3);
         assertEquals(3, userDao.getCount());
+
+    }
+
+    @Test
+    void select() throws SQLException, ClassNotFoundException {
+        assertThrows(EmptyResultDataAccessException.class, ()-> {
+            userDao.select("30");
+        });
+
 
     }
 }
