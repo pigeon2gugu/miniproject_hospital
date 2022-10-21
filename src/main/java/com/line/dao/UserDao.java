@@ -49,18 +49,10 @@ public class UserDao {
     }
 
     public void add(User user) throws SQLException, ClassNotFoundException {
-        Map<String, String> env = System.getenv();
-        Class.forName("com.mysql.cj.jdbc.Driver");
-
-        Connection conn = connectionMaker.makeConnection();
-        PreparedStatement ps = conn.prepareStatement("INSERT INTO users(id, name, password) VALUES(?, ?, ?)");
-        ps.setString(1, user.getId());
-        ps.setString(2, user.getName());
-        ps.setString(3, user.getPassword());
-
-        ps.executeUpdate(); //ctrl + enter
-        ps.close();
-        conn.close();
+//        Map<String, String> env = System.getenv();
+//        Class.forName("com.mysql.cj.jdbc.Driver");
+        AddStrategy addStrategy = new AddStrategy(user);
+        jdbcContextWithStatementStrategy(addStrategy);
     }
 
     public User select(String id) throws SQLException, ClassNotFoundException {
