@@ -7,6 +7,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
@@ -24,11 +26,18 @@ class UserDaoTest {
     @Autowired
     ApplicationContext context;
     UserDao userDao;
+    User user1;
+    User user2;
+    User user3;
 
     @BeforeEach
     void setUp() throws SQLException {
         userDao = context.getBean("awsUserDao", UserDao.class);
         userDao.deleteAll();
+
+        user1 = new User("1", "kyeonghwan", "1123");
+        user2 = new User("2", "sohyun", "1234");
+        user3 = new User("3", "sujin", "11423");
     }
 
 
@@ -50,9 +59,6 @@ class UserDaoTest {
     @Test
     @DisplayName("deleteAll and Count method test")
     void count() throws SQLException, ClassNotFoundException {
-        User user1 = new User("1", "kyeonghwan", "1123");
-        User user2 = new User("2", "sohyun", "1234");
-        User user3 = new User("3", "sujin", "11423");
 
         userDao.add(user1);
         assertEquals(1, userDao.getCount());
@@ -98,3 +104,4 @@ class UserDaoTest {
 
     }
      */
+
