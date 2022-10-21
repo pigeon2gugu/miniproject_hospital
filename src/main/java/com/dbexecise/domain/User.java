@@ -4,6 +4,7 @@ import java.sql.*;
 import java.util.Map;
 
 public class User {
+    public String getID;
     private String id;
     private String name;
     private String password;
@@ -17,9 +18,6 @@ public class User {
         this.password = password;
     }
 
-    public String getId() {
-        return id;
-    }
 
     public String getName() {
         return name;
@@ -27,5 +25,9 @@ public class User {
 
     public String getPassword() {
         return password;
+    }
+
+    public String getID() {
+        return id;
     }
 }

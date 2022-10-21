@@ -63,8 +63,8 @@ public class UserDao {
 
         try {
             conn = connectionMaker.makeConnection();
-            ps = conn.prepareStatement("delete from users");
-            ps.executeUpdate();    
+            ps = new DeleteAllSttrategy().makePreparedStatement(conn);
+            ps.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         } finally { //error가 나도 실행되는 블럭
