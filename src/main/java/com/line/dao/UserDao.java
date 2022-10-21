@@ -11,6 +11,35 @@ public class UserDao {
 
     private ConnectionMaker connectionMaker;
 
+    public void jdbcContextWithStatementStrategy(StatementStrategy stmt) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+
+        try {
+            conn = connectionMaker.makeConnection();
+            ps = stmt.makePreparedStatement(conn);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        } finally { //error가 나도 실행되는 블럭
+            if(ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                }
+
+            }
+
+            if(conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                }
+
+            }
+        }
+    }
+
     public UserDao() {
         this.connectionMaker = new AWSConnectionMaker();
     }
@@ -58,34 +87,7 @@ public class UserDao {
     }
 
     public void deleteAll() throws SQLException {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
-        try {
-            conn = connectionMaker.makeConnection();
-            ps = new DeleteAllSttrategy().makePreparedStatement(conn);
-            ps.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } finally { //error가 나도 실행되는 블럭
-            if(ps != null) {
-                try {
-                    ps.close();
-                } catch (SQLException e) {
-                }
-
-            }
-
-            if(conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                }
-
-            }
-        }
-
-
+        jdbcContextWithStatementStrategy(new DeleteAllSttrategy());
     }
 
     public int getCount() throws SQLException {
