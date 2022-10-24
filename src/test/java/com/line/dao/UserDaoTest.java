@@ -33,6 +33,7 @@ class UserDaoTest {
     @BeforeEach
     void setUp() throws SQLException {
         userDao = context.getBean("awsUserDao", UserDao.class);
+
         userDao.deleteAll();
 
         user1 = new User("1", "kyeonghwan", "1123");
