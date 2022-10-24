@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -44,7 +45,6 @@ class UserDaoTest {
 
     @Test
     @DisplayName("add and select doing well")
-
     void addAndSelect() throws SQLException, ClassNotFoundException {
 
         User user1 = new User("1", "kyeonghwan", "1123");
@@ -72,14 +72,24 @@ class UserDaoTest {
 
     @Test
     void select() throws SQLException, ClassNotFoundException {
-        assertThrows(EmptyResultDataAccessException.class, ()-> {
+        assertThrows(EmptyResultDataAccessException.class, () -> {
             userDao.select("30");
         });
+    }
 
-
+    @Test
+    @DisplayName("없을때 빈 리스트 리턴 하는지, 있을때 개수만큼 리턴 하는지")
+    void getAllTest() throws SQLException {
+        userDao.deleteAll();
+        List<User> users = userDao.getAll();
+        assertEquals(0, users.size());
+        userDao.add(user1);
+        userDao.add(user2);
+        userDao.add(user3);
+        users = userDao.getAll();
+        assertEquals(3, users.size());
     }
 }
-
 
     /*
     @Test
