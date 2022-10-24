@@ -65,16 +65,11 @@ public class UserDao {
     }
     */
 
-    public void deleteAll() throws SQLException {
-        //deleteAllStrategy라는 이름이 있지만 인터페이스 구현체인 익명 클래스는 이름이 없음.
-        jdbcContext.workContextWithStatementStrategy(new StatementStrategy() {
-            @Override
-            public PreparedStatement makePreparedStatement(Connection connection) throws SQLException {
-                return connection.prepareStatement("delete from users");
-            }
-        });
 
+    public void deleteAll() throws SQLException {
+        this.jdbcContext.executeSql("delete from users");
     }
+
     public void add(User user) throws SQLException, ClassNotFoundException {
         jdbcContext.workContextWithStatementStrategy(new StatementStrategy() {
             @Override
